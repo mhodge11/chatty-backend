@@ -2,6 +2,8 @@ import HTTP_STATUS from 'http-status-codes';
 import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
 import { UploadApiResponse } from 'cloudinary';
+import { omit } from 'lodash';
+import JWT from 'jsonwebtoken';
 import { JoiValidation } from '@global/decorators/joi-validation.decorators';
 import { uploads } from '@global/helpers/cloudinary-upload';
 import { BadRequestError } from '@global/helpers/error-handler';
@@ -12,8 +14,6 @@ import { authService } from '@service/db/auth.service';
 import { IUserDocument } from '@user/interfaces/user.interface';
 import { UserCache } from '@service/redis/user.cache';
 import { config } from '@root/config';
-import { omit } from 'lodash';
-import JWT from 'jsonwebtoken';
 import { authQueue } from '@service/queues/auth.queue';
 import { userQueue } from '@service/queues/user.queue';
 
@@ -93,8 +93,6 @@ export class SignUp {
 
   private userData(data: IAuthDocument, userObjectId: ObjectId): IUserDocument {
     const { _id, uId, username, email, password, avatarColor } = data;
-    console.log('user.authId', _id);
-    console.log('user._id', userObjectId);
     return {
       _id: userObjectId,
       authId: _id,
